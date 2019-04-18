@@ -15,3 +15,6 @@ conf_test
 # IDE
 .idea
 
+go.sum
+*.sh
+
