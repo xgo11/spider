@@ -54,18 +54,18 @@ type TaskProcessor struct {
 }
 
 type Task struct {
-	Url        string         `json:"url" bson:"url"`
-	Project    string         `json:"project" bson:"project"`
-	TaskId     string         `json:"task_id" bson:"task_id"`
-	Catg       string         `json:"catg" bson:"catg"`
-	SubCatg    string         `json:"sub_catg" bson:"sub_catg"`
-	Status     int            `json:"status" bson:"status"`
-	Schedule   *TaskSchedule  `json:"schedule" bson:"schedule"`
-	Fetch      *TaskFetcher   `json:"fetch" bson:"fetch"`
-	Process    *TaskProcessor `json:"process" bson:"process"`
-	CreateTime int64          `json:"create_time" bson:"create_time"`
-	UpdateTime int64          `json:"update_time" bson:"update_time"`
-	LastCrawl  int64          `json:"last_crawl" bson:"last_crawl"`
+	Url        string        `json:"url" bson:"url"`
+	Project    string        `json:"project" bson:"project"`
+	TaskId     string        `json:"task_id" bson:"task_id"`
+	Catg       string        `json:"catg" bson:"catg"`
+	SubCatg    string        `json:"sub_catg" bson:"sub_catg"`
+	Status     int           `json:"status" bson:"status"`
+	Schedule   TaskSchedule  `json:"schedule" bson:"schedule"`
+	Fetch      TaskFetcher   `json:"fetch" bson:"fetch"`
+	Process    TaskProcessor `json:"process" bson:"process"`
+	CreateTime int64         `json:"create_time" bson:"create_time"`
+	UpdateTime int64         `json:"update_time" bson:"update_time"`
+	LastCrawl  int64         `json:"last_crawl" bson:"last_crawl"`
 }
 
 type StatusMessage struct {
@@ -100,7 +100,6 @@ type Response struct {
 	ContentLength int               `json:"content_length"`
 	TimeMS        int               `json:"time_ms"`
 	ErrMessage    string            `json:"err_message"`
-	Save          map[string]string `json:"save"`
 	Encoding      string            `json:"encoding"`
 
 	text string

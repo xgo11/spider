@@ -1,12 +1,16 @@
 package core
 
+import "net/http"
+
+type FetcherHook struct {
+	Name      string
+	BeforeReq func(task *Task)
+	AfterReq  func(task *Task, resp *Response)
+}
+
 type IFetcher interface {
 	IShutdown
-
-	BeforeReq(task *Task)
-	Fetch(task *Task)
-	OnFetchSuccess(task *Task)
-	OnFetchError(task *Task)
-
 	Run() error
+
+	HttpServe() http.HandlerFunc
 }
