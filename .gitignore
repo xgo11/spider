@@ -17,4 +17,5 @@ conf_test
 
 go.sum
 *.sh
+vendor
 
