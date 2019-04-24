@@ -45,11 +45,12 @@ func NewProcessor(newQ, f2pQ, p2rQ, sQ core.IQueue, hooks ...core.ProcessHook) c
 
 	nameSet := make(map[string]bool)
 	for _, h := range hooks {
-		if !nameSet[h.Name] {
+		if !nameSet[h.Name] && (h.OnSendNewTask != nil || h.OnSendResult != nil) {
 			p.hooks = append(p.hooks, h)
 			nameSet[h.Name] = true
 		}
 	}
+
 	return p
 }
 

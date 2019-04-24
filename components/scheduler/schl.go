@@ -44,7 +44,7 @@ func NewScheduler(newQ, s2fQ, sQ core.IQueue, hooks ...core.SchedulerHook) core.
 	nameSet := make(map[string]bool)
 	s.hooks = make([]core.SchedulerHook, 0, len(hooks))
 	for _, h := range hooks {
-		if !nameSet[h.Name] {
+		if !nameSet[h.Name] && (h.OnTaskSelect != nil || h.OnTaskNew != nil) {
 			s.hooks = append(s.hooks, h)
 			nameSet[h.Name] = true
 		}
@@ -133,6 +133,9 @@ func (s *basicScheduler) processProjectCron(project core.IProject, fin chan stru
 					Url:     core.SystemTaskSchema + "://" + name,
 					Project: projectName,
 					Status:  core.TaskStatusInit,
+					Schedule: core.TaskSchedule{
+						Priority: core.DefaultPriority,
+					},
 					Process: core.TaskProcessor{
 						Callback: name,
 					},

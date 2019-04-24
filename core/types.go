@@ -57,3 +57,13 @@ type IProcessor interface {
 	IRunnable
 	IHTTPServer
 }
+
+type ResultWorkerHook struct {
+	Name     string
+	OnResult func(*Task, *Result)
+}
+
+type IResultWorker interface {
+	IShutdown
+	IRunnable
+}

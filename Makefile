@@ -15,3 +15,6 @@ fetcher: v
 
 processor: v
 	@go build -mod=vendor -ldflags "-s -w"  -v -o bin/processorServer servers/processor.go
+
+all: fetcher processor
+
