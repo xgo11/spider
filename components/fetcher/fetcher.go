@@ -2,7 +2,6 @@ package fetcher
 
 import (
 	"encoding/json"
-	"errors"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -46,11 +45,12 @@ func (hf *httpFetcher) Shutdown() {
 	logger.Infof("safe stopped")
 }
 
-func (hf *httpFetcher) Run() error {
+func (hf *httpFetcher) Run() {
 	hf.Lock()
 	if hf.isRunning {
 		hf.Unlock()
-		return errors.New("fetcher is running, you should not run again")
+		logger.Warnf("fetcher is running, you should not run again")
+		return
 	}
 	hf.isRunning = true
 	hf.Unlock()
@@ -83,7 +83,7 @@ func (hf *httpFetcher) Run() error {
 	hf.isRunning = false
 	logger.Infof("stopped run loop")
 	hf.Unlock()
-	return nil
+	return
 }
 
 func (hf *httpFetcher) HttpServe() http.HandlerFunc {
@@ -138,7 +138,7 @@ func (hf *httpFetcher) fetch(task *core.Task) (resp *core.Response) {
 		return
 	}
 
-	if uri.Scheme == "data" { //system schedule task
+	if uri.Scheme == core.SystemTaskSchema { //system schedule task
 		resp = &core.Response{StatusCode: 200, Url: task.Url}
 		return
 	}

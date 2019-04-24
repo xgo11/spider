@@ -20,10 +20,14 @@ const (
 // Define task status
 const (
 	TaskStatusInit int = iota
-	TaskStatusSchled
+	TaskStatusScheduled
 	TaskStatusCrawled
 	TaskStatusProcessed
 	TaskStatusResulted
+)
+
+const (
+	SystemTaskSchema = "data"
 )
 
 type TaskSchedule struct {

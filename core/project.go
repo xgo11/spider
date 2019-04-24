@@ -2,20 +2,19 @@ package core
 
 import (
 	"sync"
-	"time"
 )
 
 // fetch result process function
 type ProcessCallback struct {
 	Name     string
-	Every    time.Duration
+	Every    int64 // seconds
 	Callback func(task *Task, response *Response) ([]*Task, *Result)
 }
 
 type IProject interface {
 	IShutdown
 	GetName() string
-	ListCallbacks() []string
+	ListCallbacks() []ProcessCallback
 	RegisterSelf()
 	ExecuteCallback(name string, task *Task, resp *Response) ([]*Task, *Result)
 }
