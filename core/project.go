@@ -11,9 +11,12 @@ type ProcessCallback struct {
 	Callback func(task *Task, response *Response) ([]*Task, *Result)
 }
 
+type TaskIdFunc func(*Task) string
+
 type IProject interface {
 	GetName() string
 
+	TaskId(task *Task) string
 	ListCallback() []ProcessCallback
 
 	ListResultHook() []ResultWorkerHook
@@ -30,6 +33,7 @@ type IProjectBuilder interface {
 	AddProcessHook(hook ProcessHook)
 	AddFetcherHook(hook FetcherHook)
 	AddResultWorkerHook(hook ResultWorkerHook)
+	AddTaskIdFunc(idFunc TaskIdFunc)
 }
 
 type IProjectManager interface {

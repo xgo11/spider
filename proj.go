@@ -1,10 +1,11 @@
-package project
+package spider
 
 import (
 	"sync"
 )
 import (
 	"github.com/xgo11/spider/core"
+	"github.com/xgo11/texts"
 )
 
 //ensure interface
@@ -14,16 +15,17 @@ var (
 )
 
 type standardProject struct {
-	sync.Mutex
+	sync.RWMutex
 
 	name string
 
 	cbMap map[string]core.ProcessCallback
 	cbArr []core.ProcessCallback
 
-	fHArr []core.FetcherHook
-	pHArr []core.ProcessHook
-	rHArr []core.ResultWorkerHook
+	fHArr  []core.FetcherHook
+	pHArr  []core.ProcessHook
+	rHArr  []core.ResultWorkerHook
+	idFunc core.TaskIdFunc
 }
 
 func NewProjectBuilder(projectName string) core.IProjectBuilder {
@@ -61,6 +63,17 @@ func (sp *standardProject) ExecuteCallback(name string, task *core.Task, resp *c
 		}
 	}
 	panic("no usable callback found")
+}
+
+func (sp *standardProject) TaskId(task *core.Task) string {
+	sp.RLock()
+	defer sp.RUnlock()
+
+	if sp.idFunc != nil {
+		return sp.idFunc(task)
+	}
+
+	return texts.Md5(sp.name + ":" + task.Url + ":" + task.Schedule.ITag)
 }
 
 func (sp *standardProject) AddCallback(callback core.ProcessCallback) {
@@ -135,4 +148,15 @@ func (sp *standardProject) AddResultWorkerHook(hook core.ResultWorkerHook) {
 	hook.Project = sp.name
 	sp.rHArr = append(sp.rHArr, hook)
 
+}
+
+func (sp *standardProject) AddTaskIdFunc(idFunc core.TaskIdFunc) {
+	sp.Lock()
+	defer sp.Unlock()
+
+	if idFunc == nil && sp.idFunc != nil {
+		panic("add taskid func for project:" + sp.name + " fail")
+	}
+
+	sp.idFunc = idFunc
 }

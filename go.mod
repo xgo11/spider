@@ -14,6 +14,8 @@ require (
 	github.com/sirupsen/logrus v1.4.1
 	github.com/ugorji/go v1.1.4 // indirect
 	github.com/xgo11/datetime v0.0.0-20190419070959-3a1c3f5a715b
+	github.com/xgo11/redis4g v0.0.0-20190419074226-9732b9f11f2a
+	github.com/xgo11/texts v0.0.0-20190419065825-be6a958831ef
 	golang.org/x/net v0.0.0-20190320064053-1272bf9dcd53
 	golang.org/x/text v0.3.0
 	gopkg.in/go-playground/validator.v8 v8.18.2 // indirect
