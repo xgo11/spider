@@ -212,6 +212,15 @@ func (p *basicProcessor) onSendNewTask(task *core.Task) {
 			h.OnSendNewTask(task)
 		}
 	}
+
+	if proj, ok := core.GetProjectManager().Get(task.Project); ok {
+		for _, h := range proj.ListProcessHook() {
+			if h.OnSendNewTask != nil {
+				h.OnSendNewTask(task)
+			}
+		}
+	}
+
 }
 
 func (p *basicProcessor) onSendResult(task *core.Task, ret *core.Result) {
@@ -220,4 +229,13 @@ func (p *basicProcessor) onSendResult(task *core.Task, ret *core.Result) {
 			h.OnSendResult(task, ret)
 		}
 	}
+
+	if proj, ok := core.GetProjectManager().Get(task.Project); ok {
+		for _, h := range proj.ListProcessHook() {
+			if h.OnSendResult != nil {
+				h.OnSendResult(task, ret)
+			}
+		}
+	}
+
 }

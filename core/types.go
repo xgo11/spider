@@ -22,8 +22,13 @@ type IQueue interface {
 	Limit() int
 }
 
+type Hook struct {
+	Name    string
+	Project string
+}
+
 type SchedulerHook struct {
-	Name         string
+	Hook
 	OnTaskSelect func(task *Task)
 	OnTaskNew    func(task *Task)
 }
@@ -35,7 +40,7 @@ type IScheduler interface {
 }
 
 type FetcherHook struct {
-	Name      string
+	Hook
 	BeforeReq func(task *Task)
 	AfterReq  func(task *Task, resp *Response)
 }
@@ -47,7 +52,7 @@ type IFetcher interface {
 }
 
 type ProcessHook struct {
-	Name          string
+	Hook
 	OnSendNewTask func(*Task)
 	OnSendResult  func(*Task, *Result)
 }
@@ -59,7 +64,7 @@ type IProcessor interface {
 }
 
 type ResultWorkerHook struct {
-	Name     string
+	Hook
 	OnResult func(*Task, *Result)
 }
 

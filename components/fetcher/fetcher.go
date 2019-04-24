@@ -214,12 +214,29 @@ func (hf *httpFetcher) beforeReq(task *core.Task) {
 			h.BeforeReq(task)
 		}
 	}
+
+	if proj, ok := core.GetProjectManager().Get(task.Project); ok {
+		for _, h := range proj.ListFetcherHook() {
+			if h.BeforeReq != nil {
+				h.BeforeReq(task)
+			}
+		}
+	}
+
 }
 
 func (hf *httpFetcher) afterReq(task *core.Task, resp *core.Response) {
 	for _, h := range hf.hooks {
 		if h.AfterReq != nil {
 			h.AfterReq(task, resp)
+		}
+	}
+
+	if proj, ok := core.GetProjectManager().Get(task.Project); ok {
+		for _, h := range proj.ListFetcherHook() {
+			if h.AfterReq != nil {
+				h.AfterReq(task, resp)
+			}
 		}
 	}
 }

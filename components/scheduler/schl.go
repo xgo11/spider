@@ -110,7 +110,7 @@ func (s *basicScheduler) processProjectCron(project core.IProject, fin chan stru
 		every int64
 	}
 	var crons = map[string]*st{}
-	for _, cb := range project.ListCallbacks() {
+	for _, cb := range project.ListCallback() {
 		if cb.Every > 1 {
 			crons[cb.Name] = &st{every: cb.Every, lst: 0}
 		}

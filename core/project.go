@@ -12,16 +12,27 @@ type ProcessCallback struct {
 }
 
 type IProject interface {
-	IShutdown
 	GetName() string
-	ListCallbacks() []ProcessCallback
-	RegisterSelf()
+
+	ListCallback() []ProcessCallback
+
+	ListResultHook() []ResultWorkerHook
+	ListProcessHook() []ProcessHook
+	ListFetcherHook() []FetcherHook
+
+	RegisterMe()
 	ExecuteCallback(name string, task *Task, resp *Response) ([]*Task, *Result)
 }
 
-type IProjectManager interface {
-	IShutdown
+type IProjectBuilder interface {
+	IProject
+	AddCallback(callback ProcessCallback)
+	AddProcessHook(hook ProcessHook)
+	AddFetcherHook(hook FetcherHook)
+	AddResultWorkerHook(hook ResultWorkerHook)
+}
 
+type IProjectManager interface {
 	AddProject(project IProject)
 	List() []IProject
 	ListProjectNames() []string
@@ -53,14 +64,6 @@ func (pm *projectManager) AddProject(project IProject) {
 
 	pm.projectsMap[name] = project
 	pm.projects = append(pm.projects, project)
-
-}
-
-func (pm *projectManager) Shutdown() {
-
-	for _, p := range pm.projects {
-		p.Shutdown()
-	}
 
 }
 

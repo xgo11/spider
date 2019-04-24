@@ -91,10 +91,13 @@ func (r *basicResultWorker) Run() {
 }
 
 func (r *basicResultWorker) onResult(task *core.Task, ret *core.Result) {
-
 	task.Status = core.TaskStatusResulted
+	var projHooks []core.ResultWorkerHook
+	if proj, ok := core.GetProjectManager().Get(task.Project); ok {
+		projHooks = proj.ListResultHook()
+	}
 
-	if r.hooksCount < 1 { // when there is no hooks
+	if r.hooksCount < 1 && len(projHooks) < 1 { // when there is no hooks
 		logger.WithFields(logrus.Fields{
 			"taskid": task.TaskId,
 			"url":    task.Url,
@@ -105,6 +108,12 @@ func (r *basicResultWorker) onResult(task *core.Task, ret *core.Result) {
 	}
 
 	for _, h := range r.hooks {
+		if h.OnResult != nil {
+			h.OnResult(task, ret)
+		}
+	}
+
+	for _, h := range projHooks {
 		if h.OnResult != nil {
 			h.OnResult(task, ret)
 		}
