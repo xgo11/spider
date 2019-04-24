@@ -20,9 +20,9 @@ import (
 type httpFetcher struct {
 	sync.Mutex
 
-	schedule2FetcherQ  core.Queue
-	fetcher2ProcessorQ core.Queue
-	statusQ            core.Queue
+	schedule2FetcherQ  core.IQueue
+	fetcher2ProcessorQ core.IQueue
+	statusQ            core.IQueue
 	hooks              []core.FetcherHook
 	wg                 *sync.WaitGroup
 	pause              bool
@@ -87,7 +87,7 @@ func (hf *httpFetcher) Run() error {
 }
 
 func (hf *httpFetcher) HttpServe() http.HandlerFunc {
-	gin.SetMode(gin.ReleaseMode)
+	//gin.SetMode(gin.ReleaseMode)
 	engine := gin.Default()
 	engine.GET("/", func(ctx *gin.Context) {
 		ctx.String(http.StatusOK, "pong")

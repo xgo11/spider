@@ -20,6 +20,7 @@ const (
 // Define task status
 const (
 	TaskStatusInit int = iota
+	TaskStatusSchled
 	TaskStatusCrawled
 	TaskStatusProcessed
 	TaskStatusResulted
@@ -87,9 +88,6 @@ type Process2ResultMessage struct {
 	Result *Result `json:"result"`
 }
 
-// fetch result process function
-type ProcessFunc func(task *Task, response *Response, result *Result) error
-
 type Response struct {
 	StatusCode    int               `json:"status_code"`
 	Url           string            `json:"url"`
@@ -104,6 +102,16 @@ type Response struct {
 
 	text string
 	doc  *goquery.Document
+}
+
+type Result struct {
+	ErrCode      int    `json:"err_code"`
+	ErrMessage   string `json:"err_message"`
+	Url          string `json:"url"`
+	OrigUrl      string `json:"orig_url"`
+	Html         string `json:"html"`
+	NeedSnapshot bool   `json:"need_snapshot"`
+	Parsed       []byte `json:"parsed"`
 }
 
 func (r *Response) initEncoding() {
@@ -186,14 +194,4 @@ func (r *Response) GetDocument() *goquery.Document {
 		}
 	}
 	return r.doc
-}
-
-type Result struct {
-	ErrCode      int    `json:"err_code"`
-	ErrMessage   string `json:"err_message"`
-	Url          string `json:"url"`
-	OrigUrl      string `json:"orig_url"`
-	Html         string `json:"html"`
-	NeedSnapshot bool   `json:"need_snapshot"`
-	Parsed       []byte `json:"parsed"`
 }

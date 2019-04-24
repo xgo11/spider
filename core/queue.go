@@ -1,6 +1,6 @@
 package core
 
-type Queue interface {
+type IQueue interface {
 	Name() string
 	Put(message ...string) error
 	Pop(count ...int) []string

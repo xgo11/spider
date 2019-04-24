@@ -12,3 +12,6 @@ clean:
 
 fetcher: v
 	@go build -mod=vendor -ldflags "-s -w"  -v -o bin/fetcherServer servers/fetcher.go
+
+processor: v
+	@go build -mod=vendor -ldflags "-s -w"  -v -o bin/processorServer servers/processor.go
