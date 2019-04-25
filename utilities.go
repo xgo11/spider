@@ -16,7 +16,7 @@ func CurlTask(curlCommand string) (task *core.Task, err error) {
 		return nil, err
 	} else {
 		task = UrlTask(url, kwArgs)
-		return
+		return task, nil
 	}
 }
 
