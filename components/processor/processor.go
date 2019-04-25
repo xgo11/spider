@@ -163,6 +163,12 @@ func (p *basicProcessor) processOne(task *core.Task, resp *core.Response) {
 
 	if len(newTasks) > 0 { // send new tasks to scheduler
 		for _, tsk := range newTasks {
+			if tsk.Project == "" {
+				tsk.Project = projectName
+			}
+			if tsk.TaskId == "" {
+				tsk.TaskId = project.TaskId(tsk)
+			}
 			p.sendNewTask(tsk)
 		}
 	}
