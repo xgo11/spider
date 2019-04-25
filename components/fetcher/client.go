@@ -100,7 +100,7 @@ func (hClient *httpClient) Do(task *core.Task) (resp *core.Response) {
 		resp.ErrMessage = err.Error()
 	}
 	endTime := datetime.Now()
-	resp.TimeMS = int(endTime.Sub(startTime).Round(time.Millisecond))
+	resp.TimeMS = int(endTime.Sub(startTime).Round(time.Millisecond) / time.Millisecond)
 
 	task.LastCrawl = endTime.Unix()
 	task.Status = core.TaskStatusCrawled

@@ -204,7 +204,9 @@ func (p *basicProcessor) sendResult(task *core.Task, ret *core.Result) {
 	var err error
 
 	if msgBytes, err = json.Marshal(&msg); err == nil {
-		p.onSendResult(task, ret)
+		if err = p.process2ResultQ.Put(string(msgBytes)); err == nil {
+			p.onSendResult(task, ret)
+		}
 	}
 	if err != nil {
 		// TODO 兜底方案
