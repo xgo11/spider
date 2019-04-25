@@ -121,7 +121,7 @@ func (s *basicScheduler) processProjectCron(project core.IProject, fin chan stru
 	}
 
 	projectName := project.GetName()
-	logger.Infof("start crons for %v, count=%s", projectName, len(crons))
+	logger.Infof("start cron jobs for %v, count=%d", projectName, len(crons))
 
 	for !s.pause {
 		now := datetime.NowUnix()
