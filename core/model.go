@@ -244,7 +244,7 @@ func (r *Response) Json(data interface{}) error {
 
 func (r *Response) GetDocument() *goquery.Document {
 	if r.doc == nil {
-		if doc, err := goquery.NewDocumentFromReader(strings.NewReader(r.GetText())); err != nil {
+		if doc, err := goquery.NewDocumentFromReader(strings.NewReader(r.GetText())); err == nil {
 			r.doc = doc
 		}
 	}
