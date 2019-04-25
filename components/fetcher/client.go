@@ -53,12 +53,11 @@ func (hClient *httpClient) Do(task *core.Task) (resp *core.Response) {
 	resp = &core.Response{Url: task.Url}
 	startTime := datetime.Now()
 
-	if params, err = hClient.buildHttpParams(task); err != nil {
-		return
-	}
-	params.client = hClient.buildHttpClient(params)
-	if httpResp, err = hClient.doRequest(params); err == nil {
-		hClient.deCompressRespBody(httpResp)
+	if params, err = hClient.buildHttpParams(task); err == nil {
+		params.client = hClient.buildHttpClient(params)
+		if httpResp, err = hClient.doRequest(params); err == nil {
+			hClient.deCompressRespBody(httpResp)
+		}
 	}
 
 	if err == nil && httpResp != nil {
@@ -188,9 +187,8 @@ func (hClient *httpClient) buildHttpParams(req *core.Task) (param *clientParams,
 		readTimeout = time.Duration(req.Fetch.Timeout)
 	}
 
-	if connectTimeout >= readTimeout {
-		err = fmt.Errorf("timeout >= connect_timeout")
-		return nil, err
+	if connectTimeout > readTimeout {
+		connectTimeout = readTimeout
 	}
 	if connectTimeout > 0 {
 		param.connectTimeout = connectTimeout * time.Second
