@@ -109,24 +109,24 @@ func (s *basicScheduler) processProjectCron(project core.IProject, fin chan stru
 		lst   int64
 		every int64
 	}
-	var crons = map[string]*st{}
+	var cronMap = map[string]*st{}
 	for _, cb := range project.ListCallback() {
 		if cb.Every > 1 {
-			crons[cb.Name] = &st{every: cb.Every, lst: 0}
+			cronMap[cb.Name] = &st{every: cb.Every, lst: 0}
 		}
 	}
 
-	if len(crons) < 1 { // no cron jobs for this project
+	if len(cronMap) < 1 { // no cron jobs for this project
 		return
 	}
 
 	projectName := project.GetName()
-	logger.Infof("start cron jobs for %v, count=%d", projectName, len(crons))
+	logger.Infof("start cron jobs for %v, count=%d", projectName, len(cronMap))
 
 	for !s.pause {
 		now := datetime.NowUnix()
-		for name, cst := range crons {
-			if now-cst.lst > cst.every {
+		for name, cst := range cronMap {
+			if now-cst.lst >= cst.every {
 
 				s.wg.Add(1)
 				s.selectTask(&core.Task{
@@ -141,7 +141,6 @@ func (s *basicScheduler) processProjectCron(project core.IProject, fin chan stru
 					},
 				})
 				s.wg.Done()
-
 				cst.lst = datetime.NowUnix()
 			}
 		}
